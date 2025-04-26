@@ -21,7 +21,7 @@ export function OpportunityFilters({ onFieldChange, onTypeChange }: OpportunityF
               <SelectValue placeholder="Select field" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Fields</SelectItem>
+              <SelectItem value="all-fields">All Fields</SelectItem>
               <SelectItem value="Computer Science">Computer Science</SelectItem>
               <SelectItem value="Engineering">Engineering</SelectItem>
               <SelectItem value="Physics">Physics</SelectItem>
@@ -37,7 +37,7 @@ export function OpportunityFilters({ onFieldChange, onTypeChange }: OpportunityF
               <SelectValue placeholder="Select type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Types</SelectItem>
+              <SelectItem value="all-types">All Types</SelectItem>
               <SelectItem value="Research">Research</SelectItem>
               <SelectItem value="Internship">Internship</SelectItem>
             </SelectContent>

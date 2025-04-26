@@ -1,9 +1,7 @@
-
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter } from "lucide-react";
+import { Search } from "lucide-react";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { OpportunityCard } from "@/components/opportunities/OpportunityCard";
@@ -73,8 +71,8 @@ const Opportunities = () => {
   const filteredOpportunities = opportunities.filter(opp => {
     const matchesSearch = opp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          opp.institution.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesField = !selectedField || opp.field === selectedField;
-    const matchesType = !selectedType || opp.type === selectedType;
+    const matchesField = !selectedField || selectedField === "all-fields" || opp.field === selectedField;
+    const matchesType = !selectedType || selectedType === "all-types" || opp.type === selectedType;
     
     return matchesSearch && matchesField && matchesType;
   });
