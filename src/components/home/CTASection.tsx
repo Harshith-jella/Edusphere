@@ -7,6 +7,13 @@ export function CTASection() {
     <section className="py-20 bg-gradient-to-r from-edu-primary to-edu-secondary text-white">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
+          <div className="flex justify-center mb-6">
+            <img 
+              src="/lovable-uploads/9ad3c9a3-cef8-4daa-9f2f-fcbc3c2c8171.png" 
+              alt="EduSphere Logo" 
+              className="h-20 w-20"
+            />
+          </div>
           <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Start Your Global Academic Journey?</h2>
           <p className="text-lg md:text-xl opacity-90 mb-8">
             Join EduSphere today and connect with prestigious research opportunities and internships worldwide.

@@ -39,7 +39,12 @@ export function Navbar() {
     >
       <div className="container mx-auto px-4 flex items-center justify-between h-16 lg:h-20">
         <div className="flex items-center">
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex items-center gap-2">
+            <img 
+              src="/lovable-uploads/9ad3c9a3-cef8-4daa-9f2f-fcbc3c2c8171.png" 
+              alt="EduSphere Logo" 
+              className="h-10 w-10"
+            />
             <span className="text-2xl font-bold text-gradient">EduSphere</span>
           </Link>
         </div>
