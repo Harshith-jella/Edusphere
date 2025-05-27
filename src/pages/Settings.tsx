@@ -1,6 +1,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useTheme } from "@/contexts/ThemeContext";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,6 +18,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const Settings = () => {
   const { signOut } = useAuth();
+  const { theme, setTheme } = useTheme();
   const { toast } = useToast();
 
   const [notifications, setNotifications] = useState({
@@ -37,7 +39,6 @@ const Settings = () => {
   });
 
   const [appearance, setAppearance] = useState({
-    theme: "light",
     language: "en",
     timezone: "PST"
   });
@@ -80,15 +81,15 @@ const Settings = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <DashboardHeader />
       <div className="flex">
         <DashboardSidebar />
         <main className="flex-1 p-6">
           <div className="max-w-4xl mx-auto">
             <div className="mb-6">
-              <h1 className="text-3xl font-bold mb-2">Settings</h1>
-              <p className="text-gray-600">Manage your account settings and preferences</p>
+              <h1 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Settings</h1>
+              <p className="text-gray-600 dark:text-gray-400">Manage your account settings and preferences</p>
             </div>
 
             <Tabs defaultValue="notifications" className="space-y-6">
@@ -125,7 +126,7 @@ const Settings = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label htmlFor="email-notifications">Email Notifications</Label>
-                          <p className="text-sm text-gray-500">Receive notifications via email</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Receive notifications via email</p>
                         </div>
                         <Switch
                           id="email-notifications"
@@ -139,7 +140,7 @@ const Settings = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label htmlFor="push-notifications">Push Notifications</Label>
-                          <p className="text-sm text-gray-500">Receive browser push notifications</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Receive browser push notifications</p>
                         </div>
                         <Switch
                           id="push-notifications"
@@ -155,7 +156,7 @@ const Settings = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label htmlFor="application-updates">Application Updates</Label>
-                          <p className="text-sm text-gray-500">Get notified about application status changes</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Get notified about application status changes</p>
                         </div>
                         <Switch
                           id="application-updates"
@@ -169,7 +170,7 @@ const Settings = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label htmlFor="new-opportunities">New Opportunities</Label>
-                          <p className="text-sm text-gray-500">Be notified when new opportunities match your profile</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Be notified when new opportunities match your profile</p>
                         </div>
                         <Switch
                           id="new-opportunities"
@@ -183,7 +184,7 @@ const Settings = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label htmlFor="weekly-digest">Weekly Digest</Label>
-                          <p className="text-sm text-gray-500">Receive a summary of new opportunities weekly</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Receive a summary of new opportunities weekly</p>
                         </div>
                         <Switch
                           id="weekly-digest"
@@ -197,7 +198,7 @@ const Settings = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label htmlFor="marketing-emails">Marketing Emails</Label>
-                          <p className="text-sm text-gray-500">Receive marketing and promotional emails</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Receive marketing and promotional emails</p>
                         </div>
                         <Switch
                           id="marketing-emails"
@@ -242,7 +243,7 @@ const Settings = () => {
                             <SelectItem value="private">Private</SelectItem>
                           </SelectContent>
                         </Select>
-                        <p className="text-sm text-gray-500 mt-1">Choose who can view your profile</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Choose who can view your profile</p>
                       </div>
 
                       <Separator />
@@ -250,7 +251,7 @@ const Settings = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label htmlFor="show-email">Show Email Address</Label>
-                          <p className="text-sm text-gray-500">Allow others to see your email address</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Allow others to see your email address</p>
                         </div>
                         <Switch
                           id="show-email"
@@ -264,7 +265,7 @@ const Settings = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label htmlFor="allow-messages">Allow Messages</Label>
-                          <p className="text-sm text-gray-500">Let professors and researchers contact you</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Let professors and researchers contact you</p>
                         </div>
                         <Switch
                           id="allow-messages"
@@ -278,7 +279,7 @@ const Settings = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <Label htmlFor="allow-applications">Allow Application Invitations</Label>
-                          <p className="text-sm text-gray-500">Receive invitations to apply for opportunities</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400">Receive invitations to apply for opportunities</p>
                         </div>
                         <Switch
                           id="allow-applications"
@@ -311,8 +312,8 @@ const Settings = () => {
                       <div>
                         <Label htmlFor="theme">Theme</Label>
                         <Select
-                          value={appearance.theme}
-                          onValueChange={(value) => setAppearance(prev => ({ ...prev, theme: value }))}
+                          value={theme}
+                          onValueChange={(value: 'light' | 'dark' | 'system') => setTheme(value)}
                         >
                           <SelectTrigger className="mt-2">
                             <SelectValue />
@@ -323,6 +324,7 @@ const Settings = () => {
                             <SelectItem value="system">System</SelectItem>
                           </SelectContent>
                         </Select>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Choose your preferred theme</p>
                       </div>
 
                       <div>
