@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, Key } from "lucide-react";
+import { Mail, Key, User } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface AuthFormProps {
   type: "login" | "signup";
@@ -15,6 +16,8 @@ interface AuthFormProps {
 export function AuthForm({ type }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [role, setRole] = useState<"student" | "professor">("student");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const { signIn, signUp } = useAuth();
@@ -32,6 +35,15 @@ export function AuthForm({ type }: AuthFormProps) {
       return;
     }
 
+    if (type === "signup" && !fullName) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Please enter your full name.",
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -39,7 +51,7 @@ export function AuthForm({ type }: AuthFormProps) {
       if (type === "login") {
         result = await signIn(email, password);
       } else {
-        result = await signUp(email, password);
+        result = await signUp(email, password, fullName, role);
       }
 
       if (result.error) {
@@ -85,6 +97,22 @@ export function AuthForm({ type }: AuthFormProps) {
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
+          {type === "signup" && (
+            <div className="space-y-2">
+              <div className="relative">
+                <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Full Name"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="pl-9"
+                  required
+                  disabled={loading}
+                />
+              </div>
+            </div>
+          )}
           <div className="space-y-2">
             <div className="relative">
               <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -114,6 +142,20 @@ export function AuthForm({ type }: AuthFormProps) {
               />
             </div>
           </div>
+          {type === "signup" && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium">I am a</label>
+              <Select value={role} onValueChange={(value: "student" | "professor") => setRole(value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select your role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="student">Student</SelectItem>
+                  <SelectItem value="professor">Professor</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button 
