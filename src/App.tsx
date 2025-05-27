@@ -15,6 +15,11 @@ import AboutUs from "./pages/AboutUs";
 import Universities from "./pages/Universities";
 import ResearchProjects from "./pages/ResearchProjects";
 import Internships from "./pages/Internships";
+import Saved from "./pages/Saved";
+import Applications from "./pages/Applications";
+import Messages from "./pages/Messages";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +45,31 @@ const App = () => (
             <Route path="/universities" element={<Universities />} />
             <Route path="/research" element={<ResearchProjects />} />
             <Route path="/internships" element={<Internships />} />
+            <Route path="/saved" element={
+              <ProtectedRoute>
+                <Saved />
+              </ProtectedRoute>
+            } />
+            <Route path="/applications" element={
+              <ProtectedRoute>
+                <Applications />
+              </ProtectedRoute>
+            } />
+            <Route path="/messages" element={
+              <ProtectedRoute>
+                <Messages />
+              </ProtectedRoute>
+            } />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
+            <Route path="/settings" element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            } />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
