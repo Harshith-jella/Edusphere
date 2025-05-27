@@ -1,11 +1,12 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, Key } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface AuthFormProps {
   type: "login" | "signup";
@@ -14,25 +15,61 @@ interface AuthFormProps {
 export function AuthForm({ type }: AuthFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { signIn, signUp } = useAuth();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    if (email && password) {
-      toast({
-        title: type === "login" ? "Welcome back!" : "Account created successfully!",
-        description: type === "login" ? "You've been logged in." : "Please check your email to verify your account.",
-      });
-    } else {
+    if (!email || !password) {
       toast({
         variant: "destructive",
         title: "Error",
         description: "Please fill in all fields.",
       });
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      let result;
+      if (type === "login") {
+        result = await signIn(email, password);
+      } else {
+        result = await signUp(email, password);
+      }
+
+      if (result.error) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: result.error.message,
+        });
+      } else {
+        if (type === "signup") {
+          toast({
+            title: "Account created successfully!",
+            description: "Please check your email to verify your account.",
+          });
+        } else {
+          toast({
+            title: "Welcome back!",
+            description: "You've been logged in successfully.",
+          });
+          navigate("/dashboard");
+        }
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "An unexpected error occurred. Please try again.",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -58,6 +95,7 @@ export function AuthForm({ type }: AuthFormProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 className="pl-9"
                 required
+                disabled={loading}
               />
             </div>
           </div>
@@ -71,13 +109,19 @@ export function AuthForm({ type }: AuthFormProps) {
                 onChange={(e) => setPassword(e.target.value)}
                 className="pl-9"
                 required
+                disabled={loading}
+                minLength={6}
               />
             </div>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button type="submit" className="w-full bg-edu-primary hover:bg-edu-primary/90">
-            {type === "login" ? "Sign In" : "Create Account"}
+          <Button 
+            type="submit" 
+            className="w-full bg-edu-primary hover:bg-edu-primary/90"
+            disabled={loading}
+          >
+            {loading ? "Loading..." : (type === "login" ? "Sign In" : "Create Account")}
           </Button>
           <p className="text-sm text-center text-muted-foreground">
             {type === "login" ? (
