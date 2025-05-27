@@ -30,20 +30,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchProfile = async (userId: string) => {
+  const fetchProfile = async (userId: string, retryCount = 0) => {
     try {
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
       if (error) {
         console.error('Error fetching profile:', error);
         return;
       }
 
-      setProfile(data);
+      if (data) {
+        setProfile(data);
+      } else if (retryCount < 3) {
+        // If no profile found, retry after a short delay (profile might still be creating)
+        console.log(`Profile not found for user ${userId}, retrying... (attempt ${retryCount + 1})`);
+        setTimeout(() => {
+          fetchProfile(userId, retryCount + 1);
+        }, 1000);
+      } else {
+        console.log('Profile not found after multiple attempts');
+        setProfile(null);
+      }
     } catch (error) {
       console.error('Error fetching profile:', error);
     }
@@ -53,6 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.id);
         setSession(session);
         setUser(session?.user ?? null);
         
